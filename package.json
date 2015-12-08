@@ -1,0 +1,23 @@
+{
+  "name": "siteline.js",
+  "version": "0.1.0",
+  "description": "timeline for sites",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "letian",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^0.19.0",
+    "co": "^4.6.0",
+    "commander": "^2.9.0",
+    "koa": "^1.1.2",
+    "koa-json-body": "^4.0.0",
+    "longjohn": "^0.2.11",
+    "moment": "^2.10.6",
+    "request": "^2.67.0",
+    "sqlite3": "^3.1.1",
+    "underscore": "^1.8.3"
+  }
+}
