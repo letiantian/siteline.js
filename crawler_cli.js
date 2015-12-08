@@ -182,13 +182,6 @@ function crawlAllSites() {
     });
 }
 
-function server() {
-var koa = require('koa');
-var jsonBody = require('koa-json-body');
-var app = koa();
-app.use(jsonBody({ limit: '10kb' }));
-
-}
 
 function main() {
     var program = require('commander');

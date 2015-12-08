@@ -75,7 +75,14 @@ function getUrls(s) {
             position = _.random(0, config.crawler.userAgents.length);
             userAgent = config.crawler.userAgents[position];
         }
-        request({url: s, headers: {'User-Agent': userAgent}}, function (error, response, body) {
+        requestConfig = {
+            url: s, 
+            timeout: 5000, 
+            followRedirect: true,
+            headers: {'User-Agent': userAgent}
+        };
+
+        request(requestConfig, function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 var $ = cheerio.load(body);
                 var urls = [];
