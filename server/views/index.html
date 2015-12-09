@@ -2,9 +2,83 @@
 <html>
 <head>
     <title></title>
+    <style type="text/css">
+        .containter {
+            margin: 0 auto;
+            width: 20%;
+            min-width: 400px;
+            margin-top: 40px;
+        }   
+        a {
+            color: #222;
+        }
+        a:hover{
+           text-decoration:underline;
+            background: none repeat scroll 0 0 #D0E8F4;
+            color: #187AAB;
+        }
+    </style>
 </head>
 <body>
-    <%= id %>
+
+    <div class="containter">
+        <div class="form">
+            Site:<select id="site-select">
+              <% sites.forEach(function(site){ %>
+                <option value ="<%= site.id %>"><%=site.title %></option>
+              <% }) %>
+            </select>
+            Date: <input type="text" id="datepicker"> | 
+            <button id="query">Query</button>
+        </div>
+        <div id="content">
+            
+        </div>
+    </div>
+    <script id="template" type="x-tmpl-mustache">
+        {{#data}}
+        <p><a href="{{url}}">{{title}}</a></p>
+        {{/data}}
+    </script>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.2.0/mustache.js"></script>
+    <script>
+        var isDate = function(date) {
+            return (new Date(date) !== "Invalid Date" && !isNaN(new Date(date)) ) ? true : false;
+        };
+        $(function() {
+            $( "#datepicker" ).datepicker();
+            $( "#query" ).on('click', function(){
+                var siteId = $('#site-select').val();
+                var d = $('#datepicker').val();
+                if (isDate(d)) {
+                    var date = new Date(d);
+                    var year = date.getYear() + 1900;
+                    var month = date.getMonth() + 1;
+                    var day = date.getDate();
+                    console.log({ year: year, month: month, day: day });
+                    $.ajax({
+                        method: "POST",
+                        url: "/sites/"+siteId,
+                        data: JSON.stringify({ year: year, month: month, day: day })
+                    })
+                    .done(function( msg ) {
+                        console.log( msg );
+                        if (!msg.error) {
+                            var template = $('#template').html();
+                            Mustache.parse(template);   // optional, speeds up future uses
+                            var rendered = Mustache.render(template, msg);
+                            $('#content').html(rendered);
+                        }
+                    });
+                }
+            });
+        });
+
+    </script>
 </body>
 </html>
 

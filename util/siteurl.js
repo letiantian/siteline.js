@@ -4,20 +4,10 @@ var urllib      = require("url"),
     cheerio     = require('cheerio'),
      _          = require('underscore');
 
+
 /**
-> var url = require("url");
-undefined
-> url.resolve('http://127.0.0.1/10', 'http://127.0.0.1');
-'http://127.0.0.1/'
-> url.resolve('http://127.0.0.1/10', 'http://127.0.0.2');
-'http://127.0.0.2/'
-> url.resolve('http://127.0.0.1/10', 'http://127.0.0.1/1/2/3');
-'http://127.0.0.1/1/2/3'
-> url.resolve('http://127.0.0.1/10', '1/2/3');
-'http://127.0.0.1/1/2/3'
-> url.resolve('http://127.0.0.1/10', '/1/2/3');
-'http://127.0.0.1/1/2/3'
- */
+What is the real url of `to` in web page `from` ?
+*/
 
 function mergeUrl(from, to) {
     return urllib.resolve(from, to);
@@ -43,21 +33,6 @@ function isUrl(s) {
     }
 }
 
-/**
-> addSlash('http://127.0.0.1')
-'http://127.0.0.1/'
-> addSlash('http://127.0.0.1/')
-'http://127.0.0.1/'
-> addSlash('https://127.0.0.1/')
-'https://127.0.0.1/'
-> addSlash('https://127.0.0.1')
-'https://127.0.0.1/'
-> addSlash('https://127.0.0.1/123')
-'https://127.0.0.1/123'
-> addSlash('https://127.0.0.1/123/')
-'https://127.0.0.1/123/'
-
- */
 
 function addSlash(s) {
     tmp = s.replace('http://', '').replace('https://', '');
@@ -195,13 +170,9 @@ exports.rmDuplicate = rmDuplicate;
 exports.mergeUrlsObj = mergeUrlsObj;
 
 
+////
+
 // getUrls('http://www.ifeng.com');
-
-// rmDuplicate([{url: 123, title:1234}, {url: 123, title:12345}, {url: 1, title: 12}],[])
-// rmDuplicate([{url: 123, title:1234}, {url: 123, title:12345}, {url: 1, title: 12}], [[ { url: 1, title: 12 } ], [ { url: 1, title: 12 },  { url: 12, title: 12 } ]]);
-
-// console.log( _.uniq([{url: 123, title:1234}, {url: 123, title:1234}]) );
-
-
+// console.log( rmDuplicate([{url: 123, title:1234}, {url: 123, title:12345}, {url: 1, title: 12}],[]) )
 // console.log( _.random(0, 1) );  // 0 or 1
 // console.log( _.random(0, 1) );

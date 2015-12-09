@@ -13,7 +13,7 @@ config = {
     },
     server: {
         host: '127.0.0.1',
-        port: '4004'
+        port: '4567'
     }
 }
 
