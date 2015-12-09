@@ -36,7 +36,7 @@ describe('util/siteurl', function() {
 
     });
 
-    describe('#rmDuplicate( )', function(){
+    describe('#rmDuplicate(..., ...)', function(){
         it('the dumplicated url should be removed', function(){
             sourceUrlsObj = [{url: 123, title:1234}, {url: 123, title:12345}, {url: 1, title: 12}];
             blackList = [];

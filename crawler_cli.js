@@ -1,5 +1,5 @@
 if (process.env.NODE_ENV !== 'production'){
-  require('longjohn');
+    require('longjohn');
 }
 
 var sqlite3 = require('sqlite3').verbose();
