@@ -2,7 +2,7 @@ var moment = require('moment');
 
 
 function prevDay(year, month, day, interval) {
-    interval = interval || 1;
+    interval = interval || 0;
     var dayWrapper = moment(new Date(year, month-1, day)).subtract(interval, 'days');
     return {year    : dayWrapper.year(),
             month   : dayWrapper.month()+1,

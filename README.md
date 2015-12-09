@@ -1,31 +1,38 @@
 # siteline
 
-Save the timeline of websites. Only pages encoded with utf-8 are supported.
+Save the timeline of websites. Only pages encoded with **utf-8** are supported.
 
-The node should support Promise and Generator.
+The node should support **Promise** and **Generator**.
 
 ## crawler 
 
 Add site:
 ```
-crawler_cli --add http://www.zhihu.com --title 每日知乎
+$ node crawler_cli --add http://www.zhihu.com --title 每日知乎
 ```
 
 Show all sites:
 ```
-crawler_cli --list
+$ node crawler_cli --list
 ```
 
 Crawl: 
 ```
-crawler_cli --crawl
+$ node crawler_cli --crawl
 ```
 
 
 ## web server
 
 ```
-node server/web.js
+$ node server/web.js
+```
+
+## Test
+
+```
+$ npm install mocha -g
+$ mocha
 ```
 
 ## How to use sqlite 3
@@ -61,5 +68,3 @@ CREATE TABLE lines (
 CREATE UNIQUE INDEX uq_lines_date 
 on lines (year, month, day);
 ```
-
-
