@@ -50,11 +50,20 @@ function getUrls(s) {
             position = _.random(0, config.crawler.userAgents.length);
             userAgent = config.crawler.userAgents[position];
         }
+        fakeIP = '';
+        if (config.crawler.ipPool.length > 0) {
+            position = _.random(0, config.crawler.ipPool.length);
+            fakeIP = config.crawler.ipPool[position];
+        }
         requestConfig = {
             url: s, 
             timeout: 5000, 
             followRedirect: true,
-            headers: {'User-Agent': userAgent}
+            headers: {
+                'User-Agent': userAgent,
+                'X-Forwarded-For': fakeIP,
+                'X-Real-IP': fakeIP
+            }
         };
 
         request(requestConfig, function (error, response, body) {
