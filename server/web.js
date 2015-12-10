@@ -6,7 +6,7 @@ var views = require('co-views');
 var serve = require('koa-static');
 var app = koa();
 var render = views(__dirname + '/views', { map: { html: 'ejs' } });
-var cache = require("lru-cache")({ max: 100, maxAge: 1000 * 60 * 10 });
+var cache = require("lru-cache")({ max: 100, maxAge: 20*60*1000});
 
 
 var sqlite3 = require('sqlite3').verbose();
@@ -15,7 +15,7 @@ var db = new sqlite3.Database(config.dbpath);
 var dbUtil   = require('../util/db');
 var helper   = require('../util/helper');
 var config   = require('../config');
-
+var debug    = console.log;
 
 app.use(serve(__dirname + '/static'));
 app.use( require('koa-json')() );
@@ -44,18 +44,24 @@ function *showSites() {
 function *showLines(id) {
     try {
         jsonData = yield parse.json(this);  // get data from request body, http://stackoverflow.com/questions/22148087/request-body-is-undefined-in-koa
-        // console.log(jsonData);
+
         key = ""+id+"-"+jsonData.year+"-"+jsonData.month+"-"+jsonData.day;
         var result = cache.get(key);
         if(!result) {
+            // debug('未命中缓存');
             result = yield dbUtil.selectLine(db, id, jsonData.year, jsonData.month, jsonData.day);
+        } else {
+            // debug('命中缓存');
         }
-        // console.log(result);
+        if (!result) {
+            result = {content:'[]'}
+        } else {
+            cache.set(key, result);
+        }
         this.body = {error: false, info:'', data:helper.json2obj(result.content)};
     } catch(err) {
         this.body = {error: true, info:''+err};
     }
-
 }
 
 app.listen(config.server.port, config.server.host);

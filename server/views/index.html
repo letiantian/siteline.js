@@ -8,7 +8,10 @@
             width: 20%;
             min-width: 400px;
             margin-top: 40px;
-        }   
+        }  
+        #content {
+            margin-top: 40px;
+        }
         a {
             color: #222;
         }
@@ -39,6 +42,7 @@
         {{#data}}
         <p><a href="{{url}}">{{title}}</a></p>
         {{/data}}
+        {{^data}}No data :({{/data}}
     </script>
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>

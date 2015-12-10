@@ -2,11 +2,10 @@
   "name": "siteline.js",
   "version": "0.1.0",
   "description": "timeline for sites",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "letian",
+  "author": "Letian",
   "license": "MIT",
   "dependencies": {
     "cheerio": "^0.19.0",

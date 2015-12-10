@@ -13,25 +13,25 @@ var dbUtil   = require('./util/db');
 var helper   = require('./util/helper');
 
 var db = new sqlite3.Database(config.dbpath);
-
+var debug = console.log;
 
 function *crawl() {
-    console.log('start crawl...');
+    debug('start crawl...');
     yield dbUtil.createTable(db);
     sites = yield dbUtil.selectSites(db);
-    console.log('sites: \n', sites);
+    debug('sites: \n', sites);
     for (var siteiIdx=0; siteiIdx < sites.length; ++siteiIdx) {
         try {
             item = sites[siteiIdx];
-            console.log('get urls from: ', item.url);
+            debug('get urls from: ', item.url);
             urls = yield urlUtil.getUrls(item.url);
 
-            console.log('compact');
+            debug('compact');
             urls = urlUtil.compactUrls(urls);
             
             today = dateUtil.today();
 
-            console.log('get blackList');
+            debug('get blackList');
             blackList = []
             prevDays = dateUtil.prevDays(today.year, today.month, today.day, config.crawler.windowSize);
             for (var idx=0; idx < prevDays.length; ++idx) {
@@ -40,18 +40,19 @@ function *crawl() {
                     blackList.push(helper.json2obj(row.content || []));
                 }
             }
-
-            console.log('insert or update line');
+            debug('insert or update line');
             row = yield dbUtil.selectLine(db, item.id, today.year, today.month, today.day);
             if (row) {
                 oldUrls = helper.json2obj(row.content || []);
                 newUrls = urls;
+                debug('merge with today\'s older content');
                 finalUrls = urlUtil.mergeUrlsObj(oldUrls, newUrls);
+                debug('rm dumplicate urls with past days');
                 finalUrls = urlUtil.rmDuplicate(finalUrls, blackList);
-                console.log('update');
+                debug('update');
                 yield dbUtil.updateLine(db, item.id, today.year, today.month, today.day, helper.obj2json(finalUrls));
             } else {
-                console.log('insert');
+                debug('insert');
                 yield dbUtil.insertLine(db, item.id, today.year, today.month, today.day, helper.obj2json(urls));
             }
         } catch(err) {
@@ -90,7 +91,7 @@ function main() {
             co(function *(){
                 yield dbUtil.createTable(db);
                 yield dbUtil.insertSite(db, url, title);
-                console.log('add success');
+                debug('add success');
             }).then(function(){}, function(err){
                 console.error(err);
             });
@@ -111,14 +112,14 @@ function main() {
         co(function*(){
             _continue = true;
             process.on('SIGINT', function() {
-                console.log("Caught interrupt signal");
+                debug("Caught interrupt signal");
                 _continue = false;
             });
             while(_continue) {
-                console.log('\n******************'+ new Date()+'****************\n');
+                debug('\n******************'+ new Date()+'****************\n');
                 yield crawlAllSites();
                 if (_continue) {
-                    yield sleep(60*60*1000); // 1 hour
+                    yield sleep(config.crawler.interval);
                 }
             }
 
@@ -129,7 +130,7 @@ function main() {
         co(function *(){
             yield dbUtil.createTable(db);
             var sites = yield dbUtil.selectSites(db);
-            console.log(sites);
+            debug(sites);
         }).then(function(){}, function(err){
             console.error(err);
         });
@@ -151,9 +152,9 @@ co(function* () {
 
     ////
     // sites = yield selectSites();
-    // console.log(r);
+    // debug(r);
     // r = yield selectLine(1, 2015, 10, 3);
-    // console.log(r);
+    // debug(r);
 
     ////
     // sites = yield selectSites();
@@ -162,15 +163,15 @@ co(function* () {
     //     urls = yield urlUtil.getUrls(item.url);
 
     //     if (config.crawler.compact) {
-    //         console.log('compact');
+    //         debug('compact');
     //         urls = urlUtil.compactUrls(urls);
     //     }
-    //     console.log(helper.obj2json(urls));
+    //     debug(helper.obj2json(urls));
     //     yield insertLine(item.id, 2015, 12, 7, helper.obj2json(urls));
     // }
 
     // urls = yield urlUtil.getUrls('http://www.ifeng.com');
-    // console.log(urlUtil.compactUrls(urls));
+    // debug(urlUtil.compactUrls(urls));
 
 });
 
