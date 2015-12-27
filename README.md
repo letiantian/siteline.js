@@ -1,5 +1,7 @@
 # siteline
 
+[![Build Status](https://travis-ci.org/someus/siteline.js.svg)](https://travis-ci.org/someus/siteline.js)
+
 Save the timeline of websites. Only pages encoded with **utf-8** are supported.
 
 The node should support **Promise** and **Generator**.
