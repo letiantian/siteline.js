@@ -37,14 +37,19 @@ $ npm install mocha -g
 $ mocha
 ```
 
-## How to use sqlite 3
+
+## Dependences
+```
+$ npm install
+```
+
 
 ```
 $ sudo apt-get instal sqlite3
 $ sqlite3 foo.db
 ```
 
-
+## DB Schema
 ```SQL
 CREATE TABLE sites (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -70,3 +75,58 @@ CREATE TABLE lines (
 CREATE UNIQUE INDEX uq_lines_date 
 on lines (year, month, day);
 ```
+
+## Run forever
+Here is a sample based on supervisor and nginx in Ubuntu.
+
+**/etc/supervisor/conf.d/siteline-server.conf**
+```
+[program:siteline-server]
+command=/usr/local/bin/node /path/to/siteline.js/server/web.js
+autostart=true
+autorestart=true
+user=username
+stderr_logfile=/path/to/siteline.js/supervisor.err.log
+```
+
+**/etc/supervisor/conf.d/siteline-crawler.conf**
+```
+[program:siteline-crawler]
+command=/usr/local/bin/node /path/to/siteline.js/crawler_cli.js --crawlforever
+autostart=true
+autorestart=true
+user=username
+```
+
+**/etc/nginx/sites-enabled/siteline.conf**
+```
+upstream siteline {
+    server 127.0.0.1:4567;
+}
+
+server 
+{
+    listen 80;
+    server_name your.domain.com;
+    server_name_in_redirect  off;
+    access_log  off;
+    
+    #root /path/to/siteline.js;
+    error_log /path/to/siteline.js/nginx-error.log;
+
+    # Allow file uploads
+    client_max_body_size 1M;
+
+    proxy_read_timeout 10;
+
+    location / {
+        proxy_pass_header Server;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Scheme $scheme;
+        proxy_pass http://siteline;
+    }
+}
+```
+
