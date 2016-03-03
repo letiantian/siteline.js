@@ -130,3 +130,5 @@ server
 }
 ```
 
+## License
+MIT
