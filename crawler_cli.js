@@ -139,43 +139,6 @@ function main() {
 }
 
 
-///////////////////test
-
-
-co(function* () {
-
-    // yield dbUtil.createTable(db);
-
-    ////
-    // yield insertSite("http://www.douban.com", "douban");
-    // yield insertLine(1, 2015, 10, 3, '[]');
-
-    ////
-    // sites = yield selectSites();
-    // debug(r);
-    // r = yield selectLine(1, 2015, 10, 3);
-    // debug(r);
-
-    ////
-    // sites = yield selectSites();
-    // for (var idx=0; idx < sites.length; ++idx) {
-    //     item = sites[idx];
-    //     urls = yield urlUtil.getUrls(item.url);
-
-    //     if (config.crawler.compact) {
-    //         debug('compact');
-    //         urls = urlUtil.compactUrls(urls);
-    //     }
-    //     debug(helper.obj2json(urls));
-    //     yield insertLine(item.id, 2015, 12, 7, helper.obj2json(urls));
-    // }
-
-    // urls = yield urlUtil.getUrls('http://www.ifeng.com');
-    // debug(urlUtil.compactUrls(urls));
-
-});
-
-///////////////////main
+/////////////////// main
 
 main();
-
